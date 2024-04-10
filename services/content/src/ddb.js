@@ -20,9 +20,18 @@ async function storeRequest (requestData) {
     if (!env.ddbTable)
         return { status: 200, data: { "id": `dummy-${id}-dummy` } };
 
-    // TODO Exercise 3: Store the request to dynamoDB
-    // ...
+    const item = {
+        TableName: env.ddbTable,
+        Item: {
+            requestId: id,
+            data: {...requestData}
+        }
+    };
 
+    // TODO Exercise 3: Store the request to dynamoDB
+    response = await docClient.send(new PutCommand(item));
+    console.log(response);
+    return {status:201, data:{id}};
 }
 
 async function fetchRequestById(requestId) {
